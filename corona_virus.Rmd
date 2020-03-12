@@ -43,6 +43,23 @@ library('ggplot2')
 library('lubridate')
 library('dplyr')
 library('gridExtra')
+library('rworldmap')
+
+library(RColorBrewer)
+library(maptools)
+library(ggplot2)
+
+data(wrld_simpl)
+wrld_simpl
+```
+
+
+#create a map-shaped window
+mapDevice('x11')
+#join to a coarse resolution map
+spdf <- joinCountryData2Map(ddf, joinCode="NAME", nameJoinColumn="country")
+
+mapCountryData(spdf, nameColumnToPlot="value", catMethod="fixedWidth")
 ```
 
 ```{r}
@@ -65,6 +82,11 @@ df2 <- df %>% group_by(ObservationDate,Country.Region) %>% summarise(Confirmed =
                                                                      Recovered = sum(Recovered))
 
 ```
+
+```{r}
+spdf <- joinCountryData2Map(df2, joinCode="NAME", nameJoinColumn="Country.Region")
+```
+
 ```{r}
 
 confirmed = ggplot(df2,aes(x=ObservationDate,y = Confirmed, color = Country.Region) ) + geom_line() + theme(legend.position = "none") 
